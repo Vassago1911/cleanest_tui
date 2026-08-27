@@ -8,7 +8,7 @@ import code
 import curses
 import subprocess
 
-from lib.window_manager.main_draw_loop import WindowManager
+from lib.window_manager import WindowManager
 
 
 class InputHandler:

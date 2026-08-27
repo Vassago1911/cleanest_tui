@@ -10,8 +10,8 @@ import sys
 # Prevent Python from creating __pycache__ directories
 sys.dont_write_bytecode = True
 
-from lib.input_handling.input_character_handler import InputHandler
-from lib.window_manager.main_draw_loop import WindowManager
+from lib.input_manager import InputHandler
+from lib.window_manager import WindowManager
 
 
 def main(stdscr: curses.window) -> None:

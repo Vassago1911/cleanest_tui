@@ -16,5 +16,5 @@ documentation for details.
    :caption: Contents:
 
    source/main
-   source/input_handling
+   source/input_manager
    source/window_manager

@@ -6,17 +6,13 @@
 
 # allow the lib paths
 !/lib/
-!/lib/input_handling/
-!/lib/window_manager/
 
 # allow the files
 !.gitignore
 !README.md
 !main.py
-!lib/input_handling/__init__.py
-!lib/input_handling/input_character_handler.py
-!lib/window_manager/__init__.py
-!lib/window_manager/main_draw_loop.py
+!lib/input_manager.py
+!lib/window_manager.py
 
 # allow sphinx configuration py to be gitted
 !docs/
@@ -25,5 +21,3 @@
 !docs/index.rst
 !docs/make.bat
 !docs/Makefile
-!docs/source
-!docs/source/main.rst
