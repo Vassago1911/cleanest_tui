@@ -19,10 +19,11 @@
 !lib/window_manager/main_draw_loop.py
 
 # allow sphinx configuration py to be gitted
-!conf.py
-!gen_documentation.sh
-!index.rst
-!make.bat
-!Makefile
-!source
-!source/main.rst
+!docs/
+!docs/conf.py
+!docs/gen_documentation.sh
+!docs/index.rst
+!docs/make.bat
+!docs/Makefile
+!docs/source
+!docs/source/main.rst

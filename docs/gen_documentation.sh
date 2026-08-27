@@ -1,6 +1,6 @@
 gen_doc() {
-    sphinx-apidoc -f -o source/ lib/
-    # sphinx-apidoc -f -o source/ .
+    sphinx-apidoc -f -o ./source/ ../lib/
+    # sphinx-apidoc -f -o ./source/ ../
     rm source/modules.rst
     make clean
     make html
