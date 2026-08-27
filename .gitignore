@@ -11,6 +11,7 @@
 
 # allow the files
 !.gitignore
+!README.md
 !main.py
 !lib/input_handling/input_character_handler.py
 !lib/window_manager/main_draw_loop.py

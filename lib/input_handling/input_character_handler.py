@@ -73,6 +73,7 @@ class InputHandler:
             action = "quit"
 
         self.stdscr.refresh()
+        self._system_clear()
         return action
 
     @classmethod
