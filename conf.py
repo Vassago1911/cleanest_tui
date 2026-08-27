@@ -6,6 +6,9 @@
 import os
 import sys
 
+# Prevent Python from creating __pycache__ directories
+sys.dont_write_bytecode = True
+
 # Setze den Pfad auf den lib-Ordner (relativ zur conf.py)
 sys.path.insert(0, os.path.abspath("./lib"))
 # Falls deine Ordnerstruktur direkt im Hauptverzeichnis ist:
@@ -27,7 +30,7 @@ extensions = [
     "sphinx_rtd_theme"
 ]
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build']
 
 language = 'en'
 
@@ -35,4 +38,4 @@ language = 'en'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
+html_static_path = []

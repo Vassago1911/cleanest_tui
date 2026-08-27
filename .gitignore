@@ -20,3 +20,10 @@
 
 # allow sphinx configuration py to be gitted
 !conf.py
+!gen_documentation.sh
+!index.rst
+!make.bat
+!Makefile
+!source
+!source/main.rst
+!source/modules.rst
