@@ -11,4 +11,4 @@ gen_doc 1&> doc.log 2&> doc.log
 got_warnings=0
 if [ $(grep WARNING doc.log | wc -l) -lt 1 ]; then got_warnings=0; else got_warnings=1; fi
 
-if [ "$got_warnings" -lt 1 ]; then clear; fi
+if [ "$got_warnings" -lt 1 ]; then rm doc.log; rm -r source/; mv _build/html ../html_docs; rm -r _build; clear; fi
