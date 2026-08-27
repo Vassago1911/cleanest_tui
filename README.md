@@ -9,6 +9,7 @@ A lightweight terminal user interface (TUI) built with Python's built-in `curses
 - **Integrated debug console** — press `F5` to suspend the curses UI and drop into an interactive Python REPL (`code.interact`) with access to the current local scope, then resume the UI seamlessly on exit.
 - **Clean shutdown** — press `F9` to quit; the screen is properly cleared on exit.
 - **Cross-platform screen clearing** — uses `cls||clear` so it works whether run on Windows or Unix-like shells.
+- **Convenient automatic documentation** — just run `cd docs; bash gen_documentation.sh` and open `html_docs/index.html` in e.g. Firefox. 
 
 ## Requirements
 
@@ -23,15 +24,13 @@ A lightweight terminal user interface (TUI) built with Python's built-in `curses
 project_root/
 ├── main.py
 └── lib/
-    ├── input_handling/
-    │   └── input_character_handler.py
-    └── window_manager/
-        └── main_draw_loop.py
+    ├── input_manager.py
+    └── window_manager.py
 ```
 
 - **`main.py`** — application entry point; wraps the app in `curses.wrapper` and runs the main draw/input loop.
-- **`lib/window_manager/main_draw_loop.py`** — `WindowManager` class; owns terminal geometry, window creation, resizing, and rendering.
-- **`lib/input_handling/input_character_handler.py`** — `InputHandler` class; captures keypresses, dispatches actions, and manages the debug REPL.
+- **`lib/window_manager.py`** — `WindowManager` class; owns terminal geometry, window creation, resizing, and rendering.
+- **`lib/input_manager.py`** — `InputManager` class; captures keypresses, dispatches actions, and manages the debug REPL.
 
 ## Installation
 
@@ -68,7 +67,7 @@ At any point during runtime, press `F5` to suspend the curses interface and drop
 ## Notes
 
 - The two panes currently render placeholder German labels (`"Linkes Fenster"` / `"Rechtes Fenster"`, i.e. "Left window" / "Right window"). Update the `draw()` method in `main_draw_loop.py` to change this content.
-- Type hints follow the modern `X | None` syntax and docstrings use Sphinx-style (`:param:`, `:type:`, `:ivar:`) reStructuredText, making the codebase ready for autodoc-based documentation generation (see below).
+- Type hints follow the modern `X | None` syntax and docstrings use Sphinx-style (`:param:`, `:type:`, `:ivar:`) reStructuredText, making the codebase ready for autodoc-based documentation generation.
 
 ## License
 

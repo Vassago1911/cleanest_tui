@@ -11,7 +11,7 @@ import subprocess
 from lib.window_manager import WindowManager
 
 
-class InputHandler:
+class InputManager:
     """Handles character input, special function keys, and debugging hooks.
 
     :ivar stdscr: The main curses screen reference.
@@ -52,7 +52,7 @@ class InputHandler:
         curses.doupdate()
         self.win_manager.rebuild_windows()
 
-    def handle_input(self) -> str | None:
+    def manage_input(self) -> str | None:
         """Capture user input events and dispatch corresponding actions.
 
         :return: Action command string ('quit', 'resize', etc.) or None.

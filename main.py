@@ -10,7 +10,7 @@ import sys
 # Prevent Python from creating __pycache__ directories
 sys.dont_write_bytecode = True
 
-from lib.input_manager import InputHandler
+from lib.input_manager import InputManager
 from lib.window_manager import WindowManager
 
 
@@ -21,7 +21,7 @@ def main(stdscr: curses.window) -> None:
     :type stdscr: curses.window
     """
     win_manager: WindowManager = WindowManager(stdscr)
-    input_handler: InputHandler = InputHandler(stdscr, win_manager)
+    input_manager: InputManager = InputManager(stdscr, win_manager)
     win_manager.clear_screen()
 
     while True:
@@ -29,7 +29,7 @@ def main(stdscr: curses.window) -> None:
         win_manager.draw()
 
         # 2. Handle user input and potential commands
-        action = input_handler.handle_input()
+        action = input_manager.manage_input()
 
         # 3. Check for termination signal
         if action == "quit":
