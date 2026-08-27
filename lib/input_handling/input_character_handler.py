@@ -1,12 +1,14 @@
 import code
 import curses
-from curses import KEY_F9, window
-import os
+
+from lib.window_manager.main_draw_loop import clear_screen
+
 
 class InputHandler:
-    def __init__(self, stdscr: window):
-        self.stdscr = stdscr
-        curses.curs_set(0)  # Unsichtbarer Cursor
+    def __init__(self, stdscr: curses.window):
+        clear_screen()
+        self.stdscr: curses.window = stdscr
+        _ = curses.curs_set(0)  # Unsichtbarer Cursor
         self.stdscr.nodelay(False)
         self.stdscr.clear()
         self._handle_resize()
@@ -24,21 +26,23 @@ class InputHandler:
         try:
             del self.win_l
             del self.win_r
-        except Exception:
+        except AttributeError as _:
             pass
 
         # Neue Fenster anhand der aktuellen Dimensionen erstellen
-        self.win_l, self.win_r = self._create_windows()
+        windows: tuple[curses.window, curses.window] = self._create_windows()
+        self.win_l: curses.window = windows[0]
+        self.win_r: curses.window = windows[1]
 
     def _start_debug_session(self):
         # 1. Curses temporär beenden für die REPL
         curses.endwin()
-        os.system('cls||clear')
+        clear_screen()
         print("\n--- Python Debug REPL (Exit mit Strg+D / exit()) ---")
         code.interact(local=locals())
 
         # 2. Curses nach dem Verlassen wiederherstellen
-        os.system('cls||clear')
+        clear_screen()
         self.stdscr.clear()
         self.stdscr.refresh()
         curses.doupdate()
@@ -51,24 +55,23 @@ class InputHandler:
         # Linkes Fenster zeichnen
         self.win_l.erase()
         self.win_l.box()
-        self.win_l.addstr(1, 1, 'Linkes Fenster')
+        self.win_l.addstr(1, 1, "Linkes Fenster")
         self.win_l.refresh()
 
         # Rechtes Fenster zeichnen
         self.win_r.erase()
         self.win_r.box()
-        self.win_r.addstr(1, 1, 'Rechtes Fenster')
+        self.win_r.addstr(1, 1, "Rechtes Fenster")
         self.win_r.refresh()
 
     def check_user_input(self):
         quit_request = False
         c = self.stdscr.getch()
-
+        clear_screen()
         if c == curses.KEY_RESIZE:
             self._handle_resize()
-        elif c in ( curses.KEY_F5, ):
+        elif c in (curses.KEY_F5,):
             self._start_debug_session()
-        elif c in ( curses.KEY_F9, ):
+        elif c in (curses.KEY_F9,):
             quit_request = True
-
         return quit_request
