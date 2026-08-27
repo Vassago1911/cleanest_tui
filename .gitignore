@@ -14,8 +14,6 @@
 
 # allow the lib paths
 !/lib/
-!/lib/testing/
-!/lib/testing/__init__.py
 !/lib/input_manager.py
 !/lib/window_manager.py
 
