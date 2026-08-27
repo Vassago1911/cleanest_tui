@@ -18,4 +18,3 @@ documentation for details.
    source/main
    source/input_handling
    source/window_manager
-   source/modules
