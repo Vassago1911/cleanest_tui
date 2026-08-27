@@ -39,18 +39,24 @@ class WindowManager:
         """
         curses.update_lines_cols()
         max_y, max_x = curses.LINES, curses.COLS
-        third_x = max_x // 3
+        sidebar_r = max_x // 4
 
         # Safely discard existing windows to prevent memory leaks
         try:
             del self.win_l
             del self.win_r
+            del self.max_x
+            del self.max_y
+            del self.sidebar_r
         except AttributeError:
             pass
 
+        self.max_x : int = max_x
+        self.max_y : int = max_y
+        self.sidebar_r : int = sidebar_r
         # Create new subwindows based on updated dimensions
-        self.win_l = curses.newwin(max_y, third_x, 0, 0)
-        self.win_r = curses.newwin(max_y, max_x - third_x, 0, third_x)
+        self.win_l = curses.newwin(self.max_y, self.sidebar_r, 0, 0)
+        self.win_r = curses.newwin(self.max_y, self.max_x - self.sidebar_r, 0, self.sidebar_r)
         self.clear_screen()
 
     def draw(self) -> None:
@@ -61,14 +67,16 @@ class WindowManager:
 
         if self.win_l:
             self.win_l.erase()
+            self.win_l.addstr(1, 1,  "Linkes Fe:")
+            self.win_l.addstr(2, 1, f"  {self.max_y} lines")
+            self.win_l.addstr(3, 1, f"x {self.sidebar_r} cols")
             self.win_l.box()
-            self.win_l.addstr(1, 1, "Linkes Fenster")
             self.win_l.refresh()
 
         if self.win_r:
             self.win_r.erase()
+            self.win_r.addstr(1, 1, f"Rechtes F: \n   {self.max_y} lines \n x {self.max_x - self.sidebar_r} cols")
             self.win_r.box()
-            self.win_r.addstr(1, 1, "Rechtes Fenster")
             self.win_r.refresh()
 
     @classmethod
