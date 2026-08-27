@@ -13,7 +13,9 @@
 !.gitignore
 !README.md
 !main.py
+!lib/input_handling/__init__.py
 !lib/input_handling/input_character_handler.py
+!lib/window_manager/__init__.py
 !lib/window_manager/main_draw_loop.py
 
 # allow sphinx configuration py to be gitted
