@@ -4,16 +4,6 @@
 # allow the root folder of the project
 !/
 
-# allow the lib paths
-!/lib/
-
-# allow the files
-!.gitignore
-!README.md
-!main.py
-!lib/input_manager.py
-!lib/window_manager.py
-
 # allow sphinx configuration py to be gitted
 !docs/
 !docs/conf.py
@@ -21,3 +11,13 @@
 !docs/index.rst
 !docs/make.bat
 !docs/Makefile
+
+# allow the lib paths
+!/lib/
+!/lib/input_manager.py
+!/lib/window_manager.py
+
+# allow the files
+!.gitignore
+!main.py
+!README.md
