@@ -15,3 +15,6 @@
 !main.py
 !lib/input_handling/input_character_handler.py
 !lib/window_manager/main_draw_loop.py
+
+# allow sphinx configuration py to be gitted
+!conf.py
