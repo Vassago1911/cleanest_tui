@@ -1,0 +1,16 @@
+# ignore everything until told otherwise
+*
+
+# allow the root folder of the project
+!/
+
+# allow the lib paths
+!/lib/
+!/lib/input_handling/
+!/lib/window_manager/
+
+# allow the files
+!.gitignore
+!main.py
+!lib/input_handling/input_character_handler.py
+!lib/window_manager/main_draw_loop.py
