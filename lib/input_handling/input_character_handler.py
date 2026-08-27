@@ -1,40 +1,81 @@
+"""User input and event management module.
+
+Captures keyboard input, handles terminal resize events, and controls
+interactive debugging sessions without mixing UI layout responsibilities.
+"""
+
 import code
 import curses
+import subprocess
 
 from lib.window_manager.main_draw_loop import WindowManager
 
 
 class InputHandler:
-    def __init__(self, stdscr: curses.window, window_manager: WindowManager):
+    """Handles character input, special function keys, and debugging hooks.
+
+    :ivar stdscr: The main curses screen reference.
+    :vartype stdscr: curses.window
+    :ivar win_manager: Reference to the active window manager instance.
+    :vartype win_manager: WindowManager
+    """
+
+    def __init__(self, stdscr: curses.window, win_manager: WindowManager) -> None:
+        """Initialize the input handler with screen and window manager references.
+
+        :param stdscr: The main screen window instance.
+        :type stdscr: curses.window
+        :param win_manager: The window manager instance to notify on resize.
+        :type win_manager: WindowManager
+        """
         self.stdscr: curses.window = stdscr
-        _ = curses.curs_set(0)
+        self.win_manager: WindowManager = win_manager
+        _ = curses.curs_set(0)  # Hide cursor
         self.stdscr.nodelay(False)
-        self.window_manager: WindowManager = window_manager
-        self.window_manager.clear_screen()
+        self.stdscr.clear()
 
-    def handle_input(self):
-        """Verarbeitet den Input und gibt ein Action-Flag zurück ('quit', 'resize', 'debug', etc.)"""
-        c = self.stdscr.getch()
+    def _start_debug_session(self) -> None:
+        """Temporarily suspend curses and spawn an interactive Python REPL.
 
-        if c == curses.KEY_RESIZE:
-            self.window_manager.rebuild_windows()
-            return "resize"
-        elif c == ord("d"):
-            self._start_debug_session()
-            return "debug"
-        elif c == ord("q"):
-            return "quit"
-
-        return None
-
-    def _start_debug_session(self):
+        Allows inspection of runtime variables and state without terminating
+        the core process. Restores the curses environment afterwards.
+        """
         curses.endwin()
-        self.window_manager.clear_screen()
+        self._system_clear()
         print("\n--- Python Debug REPL (Exit mit Strg+D / exit()) ---")
         code.interact(local=locals())
 
-        # Nach REPL Curses-Zustand retten
+        # Restore curses state after exiting REPL
+        self._system_clear()
         self.stdscr.clear()
         self.stdscr.refresh()
         curses.doupdate()
-        self.window_manager.rebuild_windows()
+        self.win_manager.rebuild_windows()
+
+    def handle_input(self) -> str | None:
+        """Capture user input events and dispatch corresponding actions.
+
+        :return: Action command string ('quit', 'resize', etc.) or None.
+        :rtype: str | None
+        """
+        c = self.stdscr.getch()
+        self._system_clear()
+
+        action = None
+
+        if c == curses.KEY_RESIZE:
+            self.win_manager.rebuild_windows()
+            action = "resize"
+        elif c in (curses.KEY_F5,):
+            self._start_debug_session()
+            action = "debug"
+        elif c in (curses.KEY_F9,):
+            action = "quit"
+
+        self.stdscr.refresh()
+        return action
+
+    @classmethod
+    def _system_clear(cls) -> None:
+        """Execute system-level screen reset."""
+        _ = subprocess.run("cls||clear", shell=True, check=False)
