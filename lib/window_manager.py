@@ -124,14 +124,14 @@ class WindowManager:
             self.warn.refresh()
 
     def scroll_pad_updown(self, direction: int) -> None:
-          """Scrollt das Pad nach oben (-1) oder unten (+1)."""
+          """Scrolls the pad up or down."""
           self.pad_pos_y += direction
           # Begrenzung einhalten (max Zeilenanzahl minus sichtbarer Fensterhöhe)
           self.pad_pos_y = max(0, min(self.pad_pos_y, 52 - (self.max_y - 2)))
           self.draw()
 
     def scroll_pad_leftright(self, direction: int) -> None:
-          """Scrollt das Pad nach oben (-1) oder unten (+1)."""
+          """Scrolls the pad left or right."""
           self.pad_pos_x += direction
           # Begrenzung einhalten (max Zeilenanzahl minus sichtbarer Fensterhöhe)
           self.pad_pos_x = max(0, min(self.pad_pos_x, 50 - (self.max_x - 2)))
