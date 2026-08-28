@@ -69,9 +69,13 @@ class WindowManager:
             self.warn = None
             self.pad_content: curses.window = curses.newpad(100, 100)
 
+            self.pad_content.addstr(0,0,'='+76*'='+'=')
+
             # Testzeilen in das Pad schreiben
             for i in range(50):
-                self.pad_content.addstr(i, 0, f"Zeile {i:02d}: {self.colour_manager.interesting_chars}")
+                self.pad_content.addstr(i+1, 0, '='+f"{i:02d}--{self.colour_manager.interesting_chars}--{i:02d}"+'=')
+            self.pad_content.addstr(51,0,'='+76*'='+'=')
+
             self.colour_manager.colourize_pad(self.pad_content,100,100)
 
         else:
@@ -123,7 +127,7 @@ class WindowManager:
           """Scrollt das Pad nach oben (-1) oder unten (+1)."""
           self.pad_pos_y += direction
           # Begrenzung einhalten (max Zeilenanzahl minus sichtbarer Fensterhöhe)
-          self.pad_pos_y = max(0, min(self.pad_pos_y, 50 - (self.max_y - 2)))
+          self.pad_pos_y = max(0, min(self.pad_pos_y, 52 - (self.max_y - 2)))
           self.draw()
 
     def scroll_pad_leftright(self, direction: int) -> None:
