@@ -14,6 +14,7 @@
 
 # allow the lib paths
 !/lib/
+!/lib/colour_manager.py
 !/lib/input_manager.py
 !/lib/window_manager.py
 

@@ -66,7 +66,9 @@ class InputManager:
             self.win_manager.rebuild_windows()
             action = "resize"
         elif c in (curses.KEY_DOWN, curses.KEY_UP):
-            self.win_manager.scroll_pad( -1 if c == curses.KEY_UP else 1 )
+            self.win_manager.scroll_pad_updown( -1 if c == curses.KEY_UP else 1 )
+        elif c in (curses.KEY_LEFT, curses.KEY_RIGHT):
+            self.win_manager.scroll_pad_leftright( -1 if c == curses.KEY_LEFT else 1 )
         elif c in (curses.KEY_F5,):
             self._start_debug_session()
             action = "debug"
