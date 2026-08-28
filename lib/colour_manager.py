@@ -186,8 +186,9 @@ class ColourManager:
     # Everything else is still fully deterministic, just derived from the
     # character code instead of pinned by hand.
     _MANUAL_OVERRIDES: Final[dict[str, str]] = {
-        "Z": "dark_blue",
-        "e": "lime_green",
+        c : 'bright_rich_red' for c in string.digits
+    } | {
+        '|' : 'deep_vivid_amber', '\\':'deep_vivid_indigo'
     }
 
     def __init__(self, stdscr: curses.window) -> None:
@@ -239,13 +240,13 @@ class ColourManager:
         """Deterministically map every printable character to a colour pair."""
         name_to_index = {name: i + 1 for i, (name, _) in enumerate(self.palette)}
 
-        self.interesting_chars : str = ''.join(sorted(set( string.printable[:string.printable.find(' ')].upper() )))
+        self.interesting_chars : str = ''.join(sorted(set( string.printable[:string.printable.find(' ')].lower() )))
         for char in self.interesting_chars:
             override = self._MANUAL_OVERRIDES.get(char)
             if override in name_to_index:
                 self.char_pair[char] = name_to_index[override]
             else:
-                self.char_pair[char] = (ord(char) % len(self.palette)) + 1
+                self.char_pair[char] = (( ord(str.upper(char)) ) % len(self.palette)) + 1
 
     def attr_for(self, char: str) -> int:
         """Return the curses attribute to use when drawing a character.
@@ -257,7 +258,7 @@ class ColourManager:
             has no mapping.
         :rtype: int
         """
-        char = str.upper(char)
+        char = str.lower(char)
         if not self.has_colour:
             return curses.A_NORMAL
         pair_index = self.char_pair.get(char)

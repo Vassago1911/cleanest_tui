@@ -24,12 +24,14 @@ A lightweight terminal user interface (TUI) built with Python's built-in `curses
 project_root/
 ├── main.py
 └── lib/
+    ├── colour_manager.py
     ├── input_manager.py
     └── window_manager.py
 ```
 
 - **`main.py`** — application entry point; wraps the app in `curses.wrapper` and runs the main draw/input loop.
 - **`lib/window_manager.py`** — `WindowManager` class; owns terminal geometry, window creation, resizing, and rendering.
+- **`lib/colour_manager.py`** — `ColourManager` class; owns the process that each character has a predictable colour.
 - **`lib/input_manager.py`** — `InputManager` class; captures keypresses, dispatches actions, and manages the debug REPL.
 
 ## Installation
