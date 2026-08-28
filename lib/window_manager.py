@@ -71,7 +71,7 @@ class WindowManager:
 
             # Testzeilen in das Pad schreiben
             for i in range(50):
-                self.pad_content.addstr(i, 0, f"Zeile {i:02d}: Das ist langer Text im Pad...")
+                self.pad_content.addstr(i, 0, f"Zeile {i:02d}: {self.colour_manager.interesting_chars}")
             self.colour_manager.colourize_pad(self.pad_content,100,100)
 
         else:
