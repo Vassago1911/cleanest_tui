@@ -5,7 +5,6 @@ procedures using the standard curses library.
 """
 
 import curses
-import subprocess
 
 
 class WindowManager:
@@ -25,7 +24,6 @@ class WindowManager:
         :param stdscr: The main screen window instance.
         :type stdscr: curses.window
         """
-        self.clear_screen()
         self.stdscr: curses.window = stdscr
         self.win_l: curses.window | None = None
         self.win_r: curses.window | None = None
@@ -48,20 +46,27 @@ class WindowManager:
             del self.max_x
             del self.max_y
             del self.sidebar_r
+            del self.pad_content
+            del self.pad_pos_y
         except AttributeError:
             pass
 
-        self.max_x : int = max_x
-        self.max_y : int = max_y
-        self.sidebar_r : int = sidebar_r
+        self.max_x: int = max_x
+        self.max_y: int = max_y
+        self.sidebar_r: int = sidebar_r
+
         # Create new subwindows based on updated dimensions
         self.win_l = curses.newwin(self.max_y, self.sidebar_r, 0, 0)
         self.win_r = curses.newwin(self.max_y, self.max_x - self.sidebar_r, 0, self.sidebar_r)
-        self.clear_screen()
+        self.pad_content: curses.window = curses.newpad(100, 100)
+        self.pad_pos_y: int = 0  # Aktuelle Scroll-Position oben
+
+        # Testzeilen in das Pad schreiben
+        for i in range(50):
+            self.pad_content.addstr(i, 0, f"Zeile {i}: Das ist langer Text im Pad...")
 
     def draw(self) -> None:
         """Render all active windows, borders, and content strings."""
-        self.clear_screen()
         self.stdscr.clear()
         self.stdscr.refresh()
 
@@ -75,11 +80,29 @@ class WindowManager:
 
         if self.win_r:
             self.win_r.erase()
-            self.win_r.addstr(1, 1, f"Rechtes F: \n   {self.max_y} lines \n x {self.max_x - self.sidebar_r} cols")
+            # self.win_r.addstr(1, 1, f"Rechtes F: \n   {self.max_y} lines \n x {self.max_x - self.sidebar_r} cols")
             self.win_r.box()
             self.win_r.refresh()
+            # Berechne die verfügbare Höhe und Breite im rechten Fenster (abzüglich Rand)
+            h, w = self.win_r.getmaxyx()
+            pad_height = h - 2
 
-    @classmethod
-    def clear_screen(cls) -> None:
-        """Clear the terminal screen using system-level commands."""
-        _ = subprocess.run("cls||clear", shell=True, check=False)
+            # Das Pad in das rechte Fenster "blitten" (kopieren)
+            # Syntax: pad.refresh(pminrow, pmincol, sminrow, smincol, smaxrow, smaxcol)
+            # p = Pad-Koordinaten (Startpunkt des Ausschnitts)
+            # s = Bildschirm-Koordinaten (Zielbereich im win_r)
+            self.pad_content.refresh(
+                  self.pad_pos_y
+                , 0 # Start im Pad (oben links vom Ausschnitt)
+                , 1
+                , self.sidebar_r + 1
+                , pad_height
+                , w
+            )
+
+    def scroll_pad(self, direction: int) -> None:
+          """Scrollt das Pad nach oben (-1) oder unten (+1)."""
+          self.pad_pos_y += direction
+          # Begrenzung einhalten (max Zeilenanzahl minus sichtbarer Fensterhöhe)
+          self.pad_pos_y = max(0, min(self.pad_pos_y, 50 - (self.max_y - 2)))
+          self.draw()

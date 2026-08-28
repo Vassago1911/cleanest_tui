@@ -22,7 +22,6 @@ def main(stdscr: curses.window) -> None:
     """
     win_manager: WindowManager = WindowManager(stdscr)
     input_manager: InputManager = InputManager(stdscr, win_manager)
-    win_manager.clear_screen()
 
     while True:
         # 1. Draw UI elements via window manager
@@ -38,5 +37,3 @@ def main(stdscr: curses.window) -> None:
 
 if __name__ == "__main__":
     curses.wrapper(main)
-    # Clear the terminal buffer completely upon exit
-    WindowManager.clear_screen()

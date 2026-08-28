@@ -33,6 +33,7 @@ class InputManager:
         _ = curses.curs_set(0)  # Hide cursor
         self.stdscr.nodelay(False)
         self.stdscr.clear()
+        self._system_clear()
 
     def _start_debug_session(self) -> None:
         """Temporarily suspend curses and spawn an interactive Python REPL.
@@ -44,9 +45,8 @@ class InputManager:
         self._system_clear()
         print("\n--- Python Debug REPL (Exit mit Strg+D / exit()) ---")
         code.interact(local=locals())
-
-        # Restore curses state after exiting REPL
         self._system_clear()
+        # Restore curses state after exiting REPL
         self.stdscr.clear()
         self.stdscr.refresh()
         curses.doupdate()
@@ -59,13 +59,14 @@ class InputManager:
         :rtype: str | None
         """
         c = self.stdscr.getch()
-        self._system_clear()
 
         action = None
 
         if c == curses.KEY_RESIZE:
             self.win_manager.rebuild_windows()
             action = "resize"
+        elif c in (curses.KEY_DOWN, curses.KEY_UP):
+            self.win_manager.scroll_pad( -1 if c == curses.KEY_UP else 1 )
         elif c in (curses.KEY_F5,):
             self._start_debug_session()
             action = "debug"
@@ -73,7 +74,6 @@ class InputManager:
             action = "quit"
 
         self.stdscr.refresh()
-        self._system_clear()
         return action
 
     @classmethod
